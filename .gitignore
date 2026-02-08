@@ -36,3 +36,9 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Bun lockfile
 bun.lockb
 
+# GitHub Copilot MCP logs and temp files
+.github/copilot/logs/
+.github/copilot/config.json
+.copilot/logs/
+.copilot/config.json
+

@@ -1,0 +1,59 @@
+{
+  "mcpServers": {
+    "docker": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-docker"
+      ],
+      "env": {
+        "DOCKER_SOCKET": "/var/run/docker.sock"
+      },
+      "description": "Docker container management for Trashcan sites and Caddy reverse proxy"
+    },
+    "filesystem": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/runner/.trashcan",
+        "/home/runner/work/Trashcan/Trashcan"
+      ],
+      "description": "Secure filesystem access for JSON databases, site configs, and backups"
+    },
+    "git": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "/home/runner/.trashcan/sites",
+        "/home/runner/work/Trashcan/Trashcan"
+      ],
+      "description": "Git operations for repository cloning and version control"
+    },
+    "github": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub repository operations and integration"
+    },
+    "fetch": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ],
+      "description": "HTTP/HTTPS requests for health checks and API integration"
+    }
+  }
+}

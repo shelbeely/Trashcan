@@ -13,6 +13,17 @@ A single-binary CLI hosting panel for Bun+Next.js applications with Docker and C
 - **🦊 Fox** - AI-powered diagnostics (OpenRouter integration)
 - **🦨 Skunk** - SSL certificate management
 
+## 🤖 GitHub Copilot Integration
+
+Trashcan is fully integrated with **GitHub Copilot coding agent**!
+
+- **MCP Servers**: Docker, Filesystem, Git, GitHub, Fetch for enhanced tooling
+- **Agent Skills**: 6 specialized workflows (deploy, docker-ops, caddy, health, backup, diagnostics)
+- **Quick Guide**: See [.github/COPILOT_GUIDE.md](.github/COPILOT_GUIDE.md)
+- **Full Docs**: See [MCP_RECOMMENDATIONS.md](MCP_RECOMMENDATIONS.md)
+
+**Example:** Just ask Copilot: *"Deploy a Next.js site called my-blog with domain myblog.com"*
+
 ## 🚀 Quick Start
 
 ### Prerequisites
