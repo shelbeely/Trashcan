@@ -1099,25 +1099,40 @@ interface Diagnostic {
 
 ### Step 1: Configure GitHub Copilot MCP Servers
 
-The MCP server configuration is already set up in `.github/mcp-config.json`. This file is automatically discovered by GitHub Copilot coding agent.
+The MCP server configuration is in `.github/mcp-config.json` and follows the official GitHub Copilot MCP specification.
 
 **Location:** `.github/mcp-config.json`
 
-The configuration uses `npx` to install MCP servers on-demand, so no global installation is required.
+**Key Changes from Official Docs:**
+- All MCP servers include `tools: ["*"]` to enable all available tools
+- Environment variables use `COPILOT_MCP_` prefix as required
+- Uses `npx` for on-demand installation (no global installation needed)
 
-### Step 2: Configure MCP Servers on GitHub.com (Repository Settings)
+### Step 2: Set Up Copilot Environment (GitHub.com)
 
-For team-wide configuration:
+For repository administrators, configure the Copilot environment with required secrets:
 
-1. Go to your repository on GitHub.com
-2. Navigate to **Settings** → **Copilot** → **Coding agent**
-3. Add the MCP configuration from `.github/mcp-config.json`
-4. Set repository secrets for sensitive values:
-   - `COPILOT_MCP_GITHUB_TOKEN` - GitHub personal access token
+1. Navigate to your repository on GitHub.com
+2. Go to **Settings** → **Environments**
+3. Create or edit the **copilot** environment
+4. Add the following secrets (all must be prefixed with `COPILOT_MCP_`):
+   - `COPILOT_MCP_GITHUB_TOKEN` - GitHub personal access token with repo access
 
-This ensures all team members using GitHub Copilot have access to the same MCP servers.
+**Note:** Only variables and secrets prefixed with `COPILOT_MCP_` will be available to MCP servers.
 
-### Step 3: Agent Skills (Already Configured ✅)
+### Step 3: Add MCP Configuration to Repository Settings
+
+For team-wide MCP server access:
+
+1. Navigate to your repository on GitHub.com
+2. Go to **Settings** → **Copilot** → **Coding agent**
+3. In the **MCP configuration** section, paste the contents of `.github/mcp-config.json`
+4. Click **Save**
+5. The configuration will be validated for proper syntax
+
+**Warning:** Once configured, Copilot coding agent can use MCP server tools autonomously without asking for approval first.
+
+### Step 4: Agent Skills (Already Configured ✅)
 
 Agent Skills are already set up in `.github/skills/`:
 
@@ -1128,30 +1143,60 @@ Agent Skills are already set up in `.github/skills/`:
 - `backup-restore/SKILL.md` - Backup and restore operations
 - `ai-diagnostics/SKILL.md` - AI-powered troubleshooting
 
-GitHub Copilot coding agent automatically discovers and uses these skills.
+GitHub Copilot coding agent and CLI automatically discover and use these skills.
 
-### Step 4: Verify Configuration
+**Skill Format (per official docs):**
+- Each skill has its own subdirectory
+- Contains a `SKILL.md` file (name is required)
+- YAML frontmatter with `name` (required) and `description` (required)
+- Markdown body with instructions and examples
 
-Check that GitHub Copilot can access the configuration:
+### Step 5: Custom Agents (Already Configured ✅)
 
-1. Open the repository in VS Code or on GitHub.com
-2. Use GitHub Copilot Chat
-3. Ask: "@workspace What MCP servers are configured?"
-4. Ask: "@workspace List available agent skills"
+Custom agents for autonomous work on GitHub.com are in `.github/agents/`:
 
-### Step 5: Using Agent Skills with GitHub Copilot
+- `trashcan-deploy.agent.md` - Deployment specialist
+- `trashcan-monitor.agent.md` - Health monitoring specialist
+- `trashcan-backup.agent.md` - Backup specialist
+- `trashcan-dev.agent.md` - General development
 
-Invoke skills naturally in conversation:
+### Step 6: Verify Configuration
 
+**For GitHub.com Coding Agent:**
+1. Create a test issue in your repository
+2. Mention `@copilot` or assign the issue to Copilot
+3. Copilot should be able to access MCP tools and use skills
+
+**For VS Code:**
+1. Open the repository in VS Code with Copilot extension
+2. Open Copilot Chat (`Ctrl+Shift+I`)
+3. Ask: "@workspace What skills are available?"
+4. Skills from `.github/skills/` should be listed
+
+**For GitHub Copilot CLI:**
+1. Ensure CLI is installed: `gh copilot --version`
+2. Skills should be automatically loaded from `.github/skills/`
+
+### Step 7: Usage Examples
+
+**Autonomous Task (GitHub.com):**
 ```
-You: Deploy a new Next.js site called "my-app" with domain myapp.com
-Copilot: [Uses deploy-site skill to guide the process]
+Issue: "Deploy a new site called my-blog with domain myblog.com"
+→ Assign to @copilot
+→ Uses trashcan-deploy agent + deploy-site skill
+→ Creates PR with changes
+```
 
-You: Check the health of my-app site
-Copilot: [Uses health-checks skill to run diagnostics]
+**IDE Guidance (VS Code):**
+```
+You: [Copilot Chat] Deploy a site called my-app
+Copilot: [Uses deploy-site skill to guide you]
+```
 
-You: Create a backup of my-app
-Copilot: [Uses backup-restore skill to create backup]
+**CLI Usage:**
+```bash
+gh copilot suggest "deploy a trashcan site"
+# Copilot uses skills to provide accurate commands
 ```
 
 ---

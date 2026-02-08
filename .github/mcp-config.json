@@ -7,10 +7,10 @@
         "-y",
         "@modelcontextprotocol/server-docker"
       ],
+      "tools": ["*"],
       "env": {
         "DOCKER_SOCKET": "/var/run/docker.sock"
-      },
-      "description": "Docker container management for Trashcan sites and Caddy reverse proxy"
+      }
     },
     "filesystem": {
       "type": "local",
@@ -21,7 +21,7 @@
         "/home/runner/.trashcan",
         "/home/runner/work/Trashcan/Trashcan"
       ],
-      "description": "Secure filesystem access for JSON databases, site configs, and backups"
+      "tools": ["*"]
     },
     "git": {
       "type": "local",
@@ -32,7 +32,7 @@
         "/home/runner/.trashcan/sites",
         "/home/runner/work/Trashcan/Trashcan"
       ],
-      "description": "Git operations for repository cloning and version control"
+      "tools": ["*"]
     },
     "github": {
       "type": "local",
@@ -41,10 +41,10 @@
         "-y",
         "@modelcontextprotocol/server-github"
       ],
+      "tools": ["*"],
       "env": {
-        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
-      },
-      "description": "GitHub repository operations and integration"
+        "GITHUB_TOKEN": "$COPILOT_MCP_GITHUB_TOKEN"
+      }
     },
     "fetch": {
       "type": "local",
@@ -53,7 +53,7 @@
         "-y",
         "@modelcontextprotocol/server-fetch"
       ],
-      "description": "HTTP/HTTPS requests for health checks and API integration"
+      "tools": ["*"]
     }
   }
 }
