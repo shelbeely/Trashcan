@@ -8,6 +8,10 @@ import { getConfigManager } from '../core/config/index.ts';
 import { getDatabase } from '../core/db/index.ts';
 import { OpossumManager } from '../modules/opossum/index.ts';
 import { BadgerManager } from '../modules/badger/index.ts';
+import { SeagullManager } from '../modules/seagull/index.ts';
+import { RatManager } from '../modules/rat/index.ts';
+import { CrowManager } from '../modules/crow/index.ts';
+import { FoxManager } from '../modules/fox/index.ts';
 import { checkDocker, checkDockerCompose } from '../core/utils/index.ts';
 
 const VERSION = '1.0.0';
@@ -37,6 +41,10 @@ class TrashcanCLI {
   private db = getDatabase();
   private opossum = new OpossumManager();
   private badger = new BadgerManager();
+  private seagull = new SeagullManager();
+  private rat = new RatManager();
+  private crow = new CrowManager();
+  private fox = new FoxManager();
 
   constructor() {
     this.registerCommands();
@@ -100,6 +108,41 @@ class TrashcanCLI {
       description: 'Show site information',
       usage: 'trashcan info <name>',
       action: this.infoCommand.bind(this)
+    });
+
+    this.commands.set('logs', {
+      name: 'logs',
+      description: 'View site logs',
+      usage: 'trashcan logs <name> [--lines 100]',
+      action: this.logsCommand.bind(this)
+    });
+
+    this.commands.set('health', {
+      name: 'health',
+      description: 'Check site health',
+      usage: 'trashcan health <name>',
+      action: this.healthCommand.bind(this)
+    });
+
+    this.commands.set('backup', {
+      name: 'backup',
+      description: 'Create a backup',
+      usage: 'trashcan backup <name>',
+      action: this.backupCommand.bind(this)
+    });
+
+    this.commands.set('restore', {
+      name: 'restore',
+      description: 'Restore from backup',
+      usage: 'trashcan restore <name> <backup-id>',
+      action: this.restoreCommand.bind(this)
+    });
+
+    this.commands.set('diagnose', {
+      name: 'diagnose',
+      description: 'AI-powered diagnostics',
+      usage: 'trashcan diagnose <name>',
+      action: this.diagnoseCommand.bind(this)
     });
 
     this.commands.set('version', {
@@ -349,6 +392,166 @@ class TrashcanCLI {
   }
 
   /**
+   * View logs
+   */
+  private async logsCommand(args: string[]): Promise<void> {
+    const name = args[0];
+    if (!name) {
+      console.error('❌ Site name required');
+      process.exit(1);
+    }
+
+    const options = this.parseArgs(args);
+    const lines = parseInt(options.lines || '100');
+
+    try {
+      const logs = await this.seagull.getLogs(name, lines);
+      console.log(`\n📋 Logs for ${name} (last ${lines} lines):\n`);
+      console.log(logs);
+      console.log(`\nTo stream logs in real-time, run:`);
+      console.log(`  ${this.seagull.getStreamCommand(name)}`);
+    } catch (error) {
+      console.error(`❌ Failed to get logs: ${error}`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Check health
+   */
+  private async healthCommand(args: string[]): Promise<void> {
+    const name = args[0];
+    if (!name) {
+      console.error('❌ Site name required');
+      process.exit(1);
+    }
+
+    const site = await this.opossum.getSite(name);
+    if (!site) {
+      console.error(`❌ Site not found: ${name}`);
+      process.exit(1);
+    }
+
+    console.log(`🏥 Checking health for ${name}...`);
+
+    try {
+      // Perform health check
+      const result = await this.rat.check(site);
+      
+      console.log(`\n📊 Health Check Result:\n`);
+      console.log(`Status:        ${result.success ? '✅ Healthy' : '❌ Unhealthy'}`);
+      console.log(`HTTP Status:   ${result.status}`);
+      console.log(`Response Time: ${result.responseTime}ms`);
+      
+      if (result.error) {
+        console.log(`Error:         ${result.error}`);
+      }
+
+      // Get health summary
+      const summary = await this.rat.getHealthSummary(site.id);
+      console.log(`\n📈 Health Summary (24h):\n`);
+      console.log(`Status:        ${this.getHealthEmoji(summary.status)} ${summary.status}`);
+      console.log(`Uptime:        ${summary.uptime.toFixed(2)}%`);
+      console.log(`Avg Response:  ${summary.avgResponseTime.toFixed(0)}ms`);
+    } catch (error) {
+      console.error(`❌ Health check failed: ${error}`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Create backup
+   */
+  private async backupCommand(args: string[]): Promise<void> {
+    const name = args[0];
+    if (!name) {
+      console.error('❌ Site name required');
+      process.exit(1);
+    }
+
+    try {
+      const backup = await this.crow.backup(name);
+      console.log(`\n✅ Backup created successfully!`);
+      console.log(`   ID: ${backup.id}`);
+      console.log(`   Path: ${backup.path}`);
+    } catch (error) {
+      console.error(`❌ Backup failed: ${error}`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * Restore from backup
+   */
+  private async restoreCommand(args: string[]): Promise<void> {
+    const name = args[0];
+    const backupId = args[1];
+
+    if (!name || !backupId) {
+      console.error('❌ Usage: trashcan restore <name> <backup-id>');
+      process.exit(1);
+    }
+
+    try {
+      await this.crow.restoreBackup(backupId);
+      console.log(`\n✅ Restore completed successfully!`);
+    } catch (error) {
+      console.error(`❌ Restore failed: ${error}`);
+      process.exit(1);
+    }
+  }
+
+  /**
+   * AI-powered diagnostics
+   */
+  private async diagnoseCommand(args: string[]): Promise<void> {
+    const name = args[0];
+    if (!name) {
+      console.error('❌ Site name required');
+      process.exit(1);
+    }
+
+    const site = await this.opossum.getSite(name);
+    if (!site) {
+      console.error(`❌ Site not found: ${name}`);
+      process.exit(1);
+    }
+
+    try {
+      const diagnostic = await this.fox.diagnose(site);
+      
+      console.log(`\n🦊 AI Diagnostic Report for ${name}\n`);
+      console.log('━'.repeat(60));
+      console.log(diagnostic.analysis);
+      console.log('━'.repeat(60));
+
+      if (diagnostic.suggestions.length > 0) {
+        console.log(`\n💡 Suggested Fixes (${diagnostic.suggestions.length}):\n`);
+        
+        for (const [index, fix] of diagnostic.suggestions.entries()) {
+          console.log(`${index + 1}. ${fix.description}`);
+          console.log(`   Confidence: ${(fix.confidence * 100).toFixed(0)}%`);
+          
+          if (fix.files.length > 0) {
+            console.log(`   Files: ${fix.files.join(', ')}`);
+          }
+          
+          if (fix.diff) {
+            console.log(`   Preview: trashcan preview-fix ${name} ${fix.id}`);
+            console.log(`   Apply:   trashcan apply-fix ${name} ${fix.id}`);
+          }
+          console.log('');
+        }
+      } else {
+        console.log('\n✅ No issues detected or no fixes suggested.');
+      }
+    } catch (error) {
+      console.error(`❌ Diagnostic failed: ${error}`);
+      process.exit(1);
+    }
+  }
+
+  /**
    * Show version
    */
   private async versionCommand(): Promise<void> {
@@ -414,6 +617,18 @@ class TrashcanCLI {
       error: '❌',
       deploying: '🚀',
       building: '🔨'
+    };
+    return emojis[status] || '⚪';
+  }
+
+  /**
+   * Get health status emoji
+   */
+  private getHealthEmoji(status: string): string {
+    const emojis: Record<string, string> = {
+      healthy: '🟢',
+      degraded: '🟡',
+      down: '🔴'
     };
     return emojis[status] || '⚪';
   }
