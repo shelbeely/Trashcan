@@ -15,14 +15,30 @@ A single-binary CLI hosting panel for Bun+Next.js applications with Docker and C
 
 ## 🤖 GitHub Copilot Integration
 
-Trashcan is fully integrated with **GitHub Copilot coding agent**!
+Trashcan is fully integrated with **GitHub Copilot** in both VS Code and GitHub.com!
 
-- **MCP Servers**: Docker, Filesystem, Git, GitHub, Fetch for enhanced tooling
+### VS Code (Agent Skills)
 - **Agent Skills**: 6 specialized workflows (deploy, docker-ops, caddy, health, backup, diagnostics)
-- **Quick Guide**: See [.github/COPILOT_GUIDE.md](.github/COPILOT_GUIDE.md)
-- **Full Docs**: See [MCP_RECOMMENDATIONS.md](MCP_RECOMMENDATIONS.md)
+- **Location**: `.github/skills/`
+- **Use**: Guidance while coding in VS Code
 
-**Example:** Just ask Copilot: *"Deploy a Next.js site called my-blog with domain myblog.com"*
+### GitHub.com (Custom Agents)
+- **Custom Agents**: 4 autonomous agents (deploy, monitor, backup, dev)
+- **Location**: `.github/agents/`
+- **Use**: Assign issues to @copilot for autonomous completion
+
+### Shared MCP Servers
+- **MCP Servers**: Docker, Filesystem, Git, GitHub, Fetch
+- **Location**: `.github/mcp-config.json`
+
+**Quick Start:**
+- **VS Code**: Ask in Copilot Chat: *"Deploy a site called my-blog"*
+- **GitHub.com**: Mention `@copilot` in an issue or PR
+
+**Documentation:**
+- [Agent Skills Guide](.github/COPILOT_GUIDE.md) - VS Code usage
+- [Agents vs Skills](.github/AGENTS_VS_SKILLS.md) - Understanding the difference
+- [MCP Recommendations](MCP_RECOMMENDATIONS.md) - Complete technical details
 
 ## 🚀 Quick Start
 

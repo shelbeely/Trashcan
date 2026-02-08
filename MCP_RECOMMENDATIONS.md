@@ -7,7 +7,21 @@
 
 ## 📋 Executive Summary
 
-This document provides curated Model Context Protocol (MCP) server recommendations and GitHub Copilot Agent Skills specifically tailored for the Trashcan codebase—a hosting panel for deploying Bun+Next.js applications with Docker, Caddy reverse proxy, and AI-powered diagnostics.
+This document provides curated Model Context Protocol (MCP) server recommendations and GitHub Copilot configurations specifically tailored for the Trashcan codebase—a hosting panel for deploying Bun+Next.js applications with Docker, Caddy reverse proxy, and AI-powered diagnostics.
+
+**Two GitHub Copilot Systems Configured:**
+
+1. **Agent Skills** (`.github/skills/`) - For VS Code and IDEs
+   - Provides guidance while coding
+   - Works synchronously with developer
+   - 6 skills: deploy-site, docker-operations, caddy-config, health-checks, backup-restore, ai-diagnostics
+
+2. **Custom Agents** (`.github/agents/`) - For GitHub.com coding agent  
+   - Works autonomously on assigned issues
+   - Creates PRs independently
+   - 4 agents: trashcan-deploy, trashcan-monitor, trashcan-backup, trashcan-dev
+
+**See [.github/AGENTS_VS_SKILLS.md](.github/AGENTS_VS_SKILLS.md) for detailed comparison.**
 
 **Key Technologies in Trashcan:**
 - **Runtime:** Bun (TypeScript, ES Modules)
@@ -261,28 +275,95 @@ npm install -g @modelcontextprotocol/server-fetch
 
 ---
 
-## 🤖 GitHub Copilot Agent Skills Recommendations
+## 🤖 GitHub Copilot: Agent Skills & Custom Agents
 
-Agent Skills are structured instructions that teach GitHub Copilot specialized workflows for your repository.
+GitHub Copilot has two distinct agent systems for different environments. **Both are configured** for Trashcan.
+
+### Agent Skills (VS Code / IDE)
+
+**Location:** `.github/skills/`  
+**Purpose:** Guide developers while coding in VS Code  
+**Format:** `SKILL.md` files  
+
+Agent Skills teach GitHub Copilot Chat how to work with Trashcan patterns when you're coding locally.
+
+**Configured Skills:**
+
+1. **deploy-site** - Site deployment workflow (Opossum module)
+2. **docker-operations** - Docker container management (Badger module)
+3. **caddy-config** - Caddy reverse proxy configuration
+4. **health-checks** - Health monitoring workflow (Rat module)
+5. **backup-restore** - Backup and restore operations (Crow module)
+6. **ai-diagnostics** - AI-powered troubleshooting (Fox module)
+
+### Custom Agents (GitHub.com)
+
+**Location:** `.github/agents/`  
+**Purpose:** Autonomous agents that work on GitHub.com  
+**Format:** `.agent.md` files with YAML frontmatter  
+
+Custom Agents work independently to complete tasks assigned through GitHub issues or mentions.
+
+**Configured Agents:**
+
+1. **trashcan-deploy** - Deployment specialist (Opossum) 🦡
+   - Deploy new Next.js sites
+   - Generate docker-compose.yml and Caddyfile
+   - Manage site lifecycle
+
+2. **trashcan-monitor** - Health monitoring specialist (Rat) 🐀
+   - Container and HTTP health checks
+   - Automated recovery actions
+   - Response time monitoring
+
+3. **trashcan-backup** - Backup specialist (Crow) 🦅
+   - Create and manage backups
+   - Retention policies
+   - Safe restore operations
+
+4. **trashcan-dev** - General development (Raccoon) 🦝
+   - Full-stack Trashcan development
+   - Understands all modules
+   - Bun runtime expertise
+
+### Comparison
+
+| Feature | Agent Skills | Custom Agents |
+|---------|--------------|---------------|
+| **Environment** | VS Code / IDE | GitHub.com |
+| **Execution** | Synchronous | Autonomous |
+| **Use Case** | Coding guidance | Task completion |
+| **Output** | Suggestions | Pull requests |
+
+**Detailed comparison:** See [.github/AGENTS_VS_SKILLS.md](.github/AGENTS_VS_SKILLS.md)
 
 ### Directory Structure
 
 ```
 .github/
-├── copilot-instructions.md    # Already exists ✅
-└── skills/
-    ├── SKILL.md                # Master skills index
-    ├── deploy-site.md          # Site deployment workflow
-    ├── docker-operations.md    # Docker container management
-    ├── caddy-config.md         # Caddy configuration updates
-    ├── health-checks.md        # Health monitoring workflow
-    ├── backup-restore.md       # Backup and restore operations
-    └── ai-diagnostics.md       # AI-powered troubleshooting
+├── copilot-instructions.md    # Project conventions
+├── mcp-config.json            # MCP server configuration
+├── skills/                    # Agent Skills (VS Code)
+│   ├── deploy-site/SKILL.md
+│   ├── docker-operations/SKILL.md
+│   ├── caddy-config/SKILL.md
+│   ├── health-checks/SKILL.md
+│   ├── backup-restore/SKILL.md
+│   └── ai-diagnostics/SKILL.md
+└── agents/                    # Custom Agents (GitHub.com)
+    ├── trashcan-deploy.agent.md
+    ├── trashcan-monitor.agent.md
+    ├── trashcan-backup.agent.md
+    └── trashcan-dev.agent.md
 ```
 
 ---
 
-## 📝 Agent Skill: Deploy Site
+## 📝 Agent Skill Examples (VS Code)
+
+These skills guide developers in VS Code. Full files in `.github/skills/`.
+
+### Agent Skill: Deploy Site
 
 **File:** `.github/skills/deploy-site.md`
 
