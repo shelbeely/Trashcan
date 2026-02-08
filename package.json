@@ -1,0 +1,26 @@
+{
+  "name": "trashcan",
+  "version": "1.0.0",
+  "description": "A single-binary CLI hosting panel for Bun+Next.js with Docker and Caddy",
+  "type": "module",
+  "bin": {
+    "trashcan": "./dist/trashcan"
+  },
+  "scripts": {
+    "dev": "bun run src/cli/index.ts",
+    "build": "bun build src/cli/index.ts --compile --outfile dist/trashcan",
+    "test": "bun test"
+  },
+  "keywords": [
+    "hosting",
+    "nextjs",
+    "bun",
+    "docker",
+    "caddy",
+    "tui",
+    "cli"
+  ],
+  "author": "shelbeely",
+  "license": "MIT",
+  "dependencies": {}
+}

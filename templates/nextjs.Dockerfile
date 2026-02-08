@@ -1,0 +1,47 @@
+# Default Next.js Dockerfile for Trashcan
+# This is used when deploying Next.js applications
+
+FROM oven/bun:latest AS base
+
+# Install dependencies
+FROM base AS deps
+WORKDIR /app
+
+# Copy package files
+COPY package.json bun.lockb* ./
+
+# Install dependencies
+RUN bun install --frozen-lockfile
+
+# Build the application
+FROM base AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Build Next.js application
+RUN bun run build
+
+# Production image
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+# Port is set at runtime via docker-compose environment
+ENV PORT=3000
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy built application
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+# Port will be exposed dynamically by docker-compose
+EXPOSE ${PORT}
+
+CMD ["bun", "server.js"]
