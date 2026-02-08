@@ -66,9 +66,11 @@ export function validatePort(port: number): boolean {
 
 /**
  * Execute shell command
+ * Note: Simple implementation - for commands with spaces or special chars, pass as array
  */
-export async function exec(command: string, cwd?: string): Promise<{ stdout: string; stderr: string; exitCode: number }> {
-  const proc = Bun.spawn(command.split(' '), {
+export async function exec(command: string | string[], cwd?: string): Promise<{ stdout: string; stderr: string; exitCode: number }> {
+  const args = Array.isArray(command) ? command : command.split(' ');
+  const proc = Bun.spawn(args, {
     cwd: cwd || process.cwd(),
     stdout: 'pipe',
     stderr: 'pipe',

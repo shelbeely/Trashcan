@@ -261,10 +261,12 @@ Format your response as JSON:
 
   /**
    * Get resource metrics for a site
+   * TODO: Implement Docker stats collection
+   * Currently returns mock data - needs integration with Docker stats API
    */
   private async getMetrics(site: Site): Promise<ResourceMetrics> {
-    // In a real implementation, you'd query Docker stats
-    // For now, return mock data
+    // In a real implementation, you'd query Docker stats API
+    // For now, return mock data as placeholder
     return {
       cpu: 0,
       memory: 0,

@@ -28,6 +28,7 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+# Port is set at runtime via docker-compose environment
 ENV PORT=3000
 
 RUN addgroup --system --gid 1001 nodejs
@@ -40,6 +41,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 3000
+# Port will be exposed dynamically by docker-compose
+EXPOSE ${PORT}
 
 CMD ["bun", "server.js"]

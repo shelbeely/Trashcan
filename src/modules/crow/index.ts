@@ -33,9 +33,6 @@ export class CrowManager {
       status: 'inprogress' as BackupStatus
     };
 
-    // Save backup record
-    await this.db.createBackup(backup);
-
     try {
       // Create tar.gz archive of site directory
       const { exitCode, stderr } = await exec(
@@ -50,11 +47,11 @@ export class CrowManager {
       const file = Bun.file(backupPath);
       const size = file.size;
 
-      // Update backup with size and status
+      // Update backup with final status
       backup.size = size;
       backup.status = 'completed' as BackupStatus;
       
-      // Update in database (we need to recreate it since we can't update easily)
+      // Save completed backup to database
       await this.db.createBackup(backup);
 
       console.log(`✅ Backup created: ${formatBytes(size)}`);

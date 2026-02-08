@@ -4,6 +4,7 @@
  */
 
 import { join } from 'path';
+import { homedir } from 'os';
 import type { Site } from '../../types/index.ts';
 import { getDatabase } from '../../core/db/index.ts';
 import { getConfigManager } from '../../core/config/index.ts';
@@ -16,7 +17,6 @@ export class BadgerManager {
   private caddyfile: string;
 
   constructor() {
-    const { homedir } = require('os');
     this.caddyDir = join(homedir(), '.trashcan', 'caddy');
     this.caddyfile = join(this.caddyDir, 'Caddyfile');
   }

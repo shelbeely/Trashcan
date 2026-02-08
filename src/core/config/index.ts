@@ -5,7 +5,7 @@
 
 import { join } from 'path';
 import { homedir } from 'os';
-import type { TrashcanConfig } from '../types/index.ts';
+import type { TrashcanConfig } from '../../types/index.ts';
 
 const DEFAULT_CONFIG: TrashcanConfig = {
   version: '1.0.0',

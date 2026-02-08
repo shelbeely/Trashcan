@@ -122,38 +122,40 @@ export class OpossumManager {
 
   /**
    * Generate docker-compose.yml for the site
+   * Note: Using JSON format as Docker Compose v2+ supports both JSON and YAML
    */
   private async generateDockerCompose(site: Site): Promise<void> {
-    const composeConfig = {
-      version: '3.8',
-      services: {
-        app: {
-          build: {
-            context: './source',
-            dockerfile: 'Dockerfile'
-          },
-          container_name: `trashcan-${site.name}`,
-          restart: 'unless-stopped',
-          environment: Object.entries(site.env).map(([key, value]) => `${key}=${value}`),
-          ports: [`${site.port}:${site.port}`],
-          volumes: ['./data:/app/data'],
-          networks: ['trashcan'],
-          labels: {
-            'trashcan.site': site.name,
-            'trashcan.domain': site.domain
-          }
-        }
-      },
-      networks: {
-        trashcan: {
-          external: true
-        }
-      }
-    };
+    // Generate docker-compose in YAML format (standard)
+    const composeYaml = `version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./source
+      dockerfile: Dockerfile
+    container_name: trashcan-${site.name}
+    restart: unless-stopped
+    environment:
+${Object.entries(site.env).map(([key, value]) => `      - ${key}=${value}`).join('\n')}
+      - PORT=${site.port}
+    ports:
+      - "${site.port}:${site.port}"
+    volumes:
+      - ./data:/app/data
+    networks:
+      - trashcan
+    labels:
+      trashcan.site: ${site.name}
+      trashcan.domain: ${site.domain}
+
+networks:
+  trashcan:
+    external: true
+`;
 
     // Write docker-compose.yml
     const composePath = join(site.path, 'docker-compose.yml');
-    await Bun.write(composePath, JSON.stringify(composeConfig, null, 2));
+    await Bun.write(composePath, composeYaml);
   }
 
   /**

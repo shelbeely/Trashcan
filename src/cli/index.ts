@@ -190,8 +190,13 @@ class TrashcanCLI {
     await this.db.init();
     console.log('  ✓ Configuration created');
 
-    // Get email for Let's Encrypt
-    const email = args[0] || 'admin@example.com';
+    // Get email for Let's Encrypt (required)
+    const email = args[0];
+    if (!email || !email.includes('@')) {
+      console.error('\n❌ Valid email address required for Let\'s Encrypt SSL certificates');
+      console.error('   Usage: trashcan init your@email.com');
+      process.exit(1);
+    }
     
     // Initialize Caddy
     console.log('\n✓ Setting up Caddy reverse proxy...');
