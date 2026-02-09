@@ -40,6 +40,24 @@
         "@carlosedp/mcp-bun"
       ],
       "tools": ["*"]
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "tools": ["*"]
+    },
+    "memory": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "tools": ["*"]
     }
   }
 }
