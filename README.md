@@ -13,6 +13,33 @@ A single-binary CLI hosting panel for Bun+Next.js applications with Docker and C
 - **🦊 Fox** - AI-powered diagnostics (OpenRouter integration)
 - **🦨 Skunk** - SSL certificate management
 
+## 🤖 GitHub Copilot Integration
+
+Trashcan is fully integrated with **GitHub Copilot** in both VS Code and GitHub.com!
+
+### VS Code (Agent Skills)
+- **Agent Skills**: 6 specialized workflows (deploy, docker-ops, caddy, health, backup, diagnostics)
+- **Location**: `.github/skills/`
+- **Use**: Guidance while coding in VS Code
+
+### GitHub.com (Custom Agents)
+- **Custom Agents**: 4 autonomous agents (deploy, monitor, backup, dev)
+- **Location**: `.github/agents/`
+- **Use**: Assign issues to @copilot for autonomous completion
+
+### Shared MCP Servers
+- **MCP Servers**: Docker, Filesystem, Git, GitHub, Fetch
+- **Location**: `.github/mcp-config.json`
+
+**Quick Start:**
+- **VS Code**: Ask in Copilot Chat: *"Deploy a site called my-blog"*
+- **GitHub.com**: Mention `@copilot` in an issue or PR
+
+**Documentation:**
+- [Agent Skills Guide](.github/COPILOT_GUIDE.md) - VS Code usage
+- [Agents vs Skills](.github/AGENTS_VS_SKILLS.md) - Understanding the difference
+- [MCP Recommendations](MCP_RECOMMENDATIONS.md) - Complete technical details
+
 ## 🚀 Quick Start
 
 ### Prerequisites

@@ -1,0 +1,63 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/runner/work/Trashcan/Trashcan"
+      ],
+      "tools": ["*"]
+    },
+    "git": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "/home/runner/work/Trashcan/Trashcan"
+      ],
+      "tools": ["*"]
+    },
+    "github": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "tools": ["*"],
+      "env": {
+        "GITHUB_TOKEN": "$COPILOT_MCP_GITHUB_TOKEN"
+      }
+    },
+    "bun": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@carlosedp/mcp-bun"
+      ],
+      "tools": ["*"]
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "tools": ["*"]
+    },
+    "memory": {
+      "type": "local",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "tools": ["*"]
+    }
+  }
+}
