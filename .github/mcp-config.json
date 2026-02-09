@@ -1,24 +1,11 @@
 {
   "mcpServers": {
-    "docker": {
-      "type": "local",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-docker"
-      ],
-      "tools": ["*"],
-      "env": {
-        "DOCKER_SOCKET": "/var/run/docker.sock"
-      }
-    },
     "filesystem": {
       "type": "local",
       "command": "npx",
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/home/runner/.trashcan",
         "/home/runner/work/Trashcan/Trashcan"
       ],
       "tools": ["*"]
@@ -29,7 +16,6 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-git",
-        "/home/runner/.trashcan/sites",
         "/home/runner/work/Trashcan/Trashcan"
       ],
       "tools": ["*"]
@@ -46,12 +32,12 @@
         "GITHUB_TOKEN": "$COPILOT_MCP_GITHUB_TOKEN"
       }
     },
-    "fetch": {
+    "bun": {
       "type": "local",
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-fetch"
+        "@carlosedp/mcp-bun"
       ],
       "tools": ["*"]
     }
